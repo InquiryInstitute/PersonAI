@@ -39,3 +39,8 @@ tiktoken>=0.5.2
 pytest>=7.4.0
 black>=23.12.0
 ruff>=0.1.11
+
+# Fine-tuning (optional - for real-time learning)
+torch>=2.1.0
+bitsandbytes>=0.41.0  # For quantization
+peft>=0.7.0  # Parameter-efficient fine-tuning (LoRA)
