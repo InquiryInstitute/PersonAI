@@ -16,52 +16,72 @@ personAI enables you to ask questions and interact with your personal data using
 
 ## Deployment Options
 
-### GitHub Codespaces
-Deploy and run personAI directly in GitHub Codespaces for a zero-setup development environment.
+### Primary: M4 Mac Mini (Recommended)
+Run personAI on your own M4 Mac Mini for true data sovereignty. Leverages Apple Silicon for:
+- Local LLM inference (Ollama, MLX)
+- Zero cloud compute costs
+- Complete privacy - data never leaves your hardware
+- High performance with Apple Silicon optimizations
 
-### Google Cloud Run (GCR)
-Deploy personAI as a serverless application on Google Cloud Run for production use.
+### Alternative: GitHub Codespaces
+Deploy and run personAI in GitHub Codespaces for development and testing.
+
+### Alternative: Google Cloud Run (GCR)
+Deploy personAI as a serverless application on Google Cloud Run if cloud deployment is preferred.
 
 ## Getting Started
 
 ### Prerequisites
 
+- M4 Mac Mini (or other Apple Silicon Mac)
+- macOS 15+ (Sequoia)
+- Python 3.11+ (included with macOS or via Homebrew)
 - GitHub account with personal repositories
-- Google Cloud account (for Drive access and GCR deployment)
-- Python 3.11+
+- Google Cloud account (for Drive access only)
 
-### Local Development
+### M4 Mac Mini Setup
 
 ```bash
+# Install Homebrew (if not already installed)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install Python 3.11+
+brew install python@3.11
+
 # Clone the repository
 git clone https://github.com/InquiryInstitute/personAI.git
 cd personAI
 
+# Create virtual environment
+python3.11 -m venv venv
+source venv/bin/activate
+
 # Install dependencies
 pip install -r requirements.txt
 
+# Install Ollama for local LLM (optional but recommended)
+brew install ollama
+
 # Configure environment variables
 cp .env.example .env
-# Edit .env with your API keys and credentials
+# Edit .env with your credentials
 
-# Run locally
+# Run as a service (stays running)
 python main.py
 ```
 
-### Deploy to Codespaces
+### Run as Background Service (macOS)
 
-Click the "Code" button on GitHub and select "Create codespace on main" to launch a development environment with all dependencies pre-installed.
-
-### Deploy to Google Cloud Run
+Create a LaunchAgent to keep personAI running:
 
 ```bash
-# Build and deploy
-gcloud run deploy personai \
-  --source . \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated
+# See docs/macos-service.md for detailed instructions
 ```
+
+### Alternative Deployments
+
+**Codespaces**: Click "Code" → "Create codespace on main"  
+**Google Cloud Run**: See `docs/gcr-deployment.md`
 
 ## Architecture
 
