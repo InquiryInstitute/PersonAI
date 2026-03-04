@@ -1,0 +1,44 @@
+{
+  "tests": [
+    {
+      "name": "Backend Dependencies Install",
+      "setup": "",
+      "run": "pip install -r requirements.txt",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 20
+    },
+    {
+      "name": "Frontend Dependencies Install",
+      "setup": "cd frontend",
+      "run": "npm ci",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 20
+    },
+    {
+      "name": "Frontend Builds",
+      "setup": "cd frontend && npm ci",
+      "run": "npm run build",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 20
+    },
+    {
+      "name": "Submission File Exists",
+      "setup": "",
+      "run": "test -f SUBMISSION.md",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 1,
+      "points": 20
+    }
+  ]
+}

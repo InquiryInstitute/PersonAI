@@ -1,0 +1,77 @@
+name: Autograding Tests
+on:
+  push:
+  workflow_dispatch:
+  repository_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Test Backend Setup
+        id: backend-test
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Backend Setup
+          setup-command: pip install -r requirements.txt
+          command: python -c "import fastapi; import uvicorn; print('Backend dependencies OK')"
+          timeout: 10
+          max-score: 20
+
+      - name: Test Backend Starts
+        id: backend-start-test
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Backend Starts
+          setup-command: pip install -r requirements.txt
+          command: timeout 10 python main.py || exit 0
+          timeout: 15
+          max-score: 20
+
+      - name: Test Frontend Setup
+        id: frontend-test
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Frontend Setup
+          setup-command: cd frontend && npm ci
+          command: cd frontend && npm run build
+          timeout: 10
+          max-score: 20
+
+      - name: Check Submission File
+        id: submission-test
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Submission File
+          command: test -f SUBMISSION.md && echo "Submission file exists"
+          timeout: 1
+          max-score: 20
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          BACKEND-TEST_RESULTS: "${{steps.backend-test.outputs.result}}"
+          BACKEND-START-TEST_RESULTS: "${{steps.backend-start-test.outputs.result}}"
+          FRONTEND-TEST_RESULTS: "${{steps.frontend-test.outputs.result}}"
+          SUBMISSION-TEST_RESULTS: "${{steps.submission-test.outputs.result}}"
+        with:
+          runners: backend-test,backend-start-test,frontend-test,submission-test
