@@ -10,7 +10,12 @@
 	let userCode = $state('');
 	let verificationUri = $state('');
 	let isPolling = $state(false);
-	const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+	
+	// Auto-detect API URL (Codespace or local)
+	const API_URL = import.meta.env.VITE_API_URL || 
+		(typeof window !== 'undefined' && window.location.hostname.includes('github.dev')
+			? window.location.origin.replace('-5173', '-8080')
+			: 'http://localhost:8080');
 
 	async function handleGitHubLogin() {
 		isLoading = true;

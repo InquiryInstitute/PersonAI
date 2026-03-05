@@ -8,6 +8,7 @@
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
   "postCreateCommand": "pip install -r requirements.txt && cd frontend && npm install",
+  "postStartCommand": "python main.py &",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -28,12 +29,18 @@
   "forwardPorts": [8080, 5173],
   "portsAttributes": {
     "8080": {
-      "label": "personAI Backend API",
-      "onAutoForward": "notify"
+      "label": "PersonAI Backend API",
+      "onAutoForward": "notify",
+      "visibility": "public"
     },
     "5173": {
-      "label": "personAI Frontend (Vite)",
-      "onAutoForward": "openBrowser"
+      "label": "PersonAI Frontend (Vite)",
+      "onAutoForward": "openBrowser",
+      "visibility": "public"
     }
+  },
+  "remoteEnv": {
+    "GITHUB_CLIENT_ID": "${localEnv:GITHUB_CLIENT_ID}",
+    "GITHUB_CLIENT_SECRET": "${localEnv:GITHUB_CLIENT_SECRET}"
   }
 }
